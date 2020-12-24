@@ -67,9 +67,9 @@ public class SysLoginController extends AbstractController {
     @ApiOperation(value = "登录", notes = "需先获取验证码")
     public Map<String, Object> login(@RequestBody SysLoginForm form) {
         boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
-        if (!captcha) {
-            return R.error("验证码不正确");
-        }
+//        if (!captcha) {
+//            return R.error("验证码不正确");
+//        }
 
         //用户信息
         SysUserEntity user = sysUserService.queryByUserName(form.getUsername());

@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  wx:
+    restart: always
+    image: openjdk:8
+    container_name: qiqiao_wx
+    volumes:
+    # 本地jar包路径
+    - /usr/local/jar/wx-api.jar:/wx-api.jar:rw
+    - /usr/local/wx/logs:/usr/local/wx/logs:rw
+    # 指定容器时间为宿主机时间
+    - /etc/localtime:/etc/localtime:rw
+    # 访问端口
+    ports:
+    - "8088:8088"
+    environment:
+    # 指定时区
+    - TZ="Asia/Shanghai"
+    entrypoint: java -server -Xms256m -Xmx256m -jar -Dserver.port=8088 -Dspring.profiles.active=dev wx-api.
+
+  mysql:
+    restart: always
+    image: mysql
+    container_name: my_mysql
+    volumes:
+    - /usr/local//mysql/mydir:/mydir
+    - /usr/local/mysql/var/lib/mysql:/var/lib/mysql
+    - /usr/local/mysql/etc/my.cnf:/etc/my.cnf
+    #      数据库还原目录 可将需要还原的sql文件放在这里
+    - /usr/local/mysql/source:/docker-entrypoint-initdb.d
+    environment:
+    - "MYSQL_ROOT_PASSWORD=zhggp2020"
+    - "MYSQL_DATABASE=mydb"
+    - "TZ=Asia/Shanghai"
+    ports:
+    - 3306:3306

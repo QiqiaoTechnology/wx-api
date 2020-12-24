@@ -22,9 +22,9 @@ import java.util.Set;
  * 系统菜单
  * @author Mark sunlightcs@gmail.com
  */
-//@RestController
-//@RequestMapping("/sys/menu")
-//@Api(tags = {"管理后台菜单"})
+@RestController
+@RequestMapping("/sys/menu")
+@Api(tags = {"管理后台菜单"})
 public class SysMenuController extends AbstractController {
     @Autowired
     private SysMenuService sysMenuService;

@@ -300,7 +300,8 @@ CREATE TABLE `wx_msg_reply_rule`  (
 -- ----------------------------
 -- Records of wx_msg_reply_rule
 -- ----------------------------
-INSERT INTO `wx_msg_reply_rule` VALUES (1, '', '关注公众号', 'subscribe', 0, 'text', '你好，欢迎关注！\n<a href=\"https://github.com/niefy\">点击链接查看我的主页</a>', 1, '关注回复', '00:00:00', '23:59:59', 0, '2020-05-20 15:15:00');
+INSERT INTO `wx_msg_reply_rule` VALUES (1, '', '关注回复', 'subscribe', 0, 'text', '你好，欢迎关注！', 1, '关注回复', '00:00:00', '23:59:59', 0, '2020-05-20 15:15:00');
+INSERT INTO `wx_msg_reply_rule` VALUES (2, '', '默认回复', 'default', 0, 'text', '你好！', 1, '关注回复', '00:00:00', '23:59:59', 0, '2020-05-20 15:15:00');
 
 -- ----------------------------
 -- Table structure for wx_msg_template
