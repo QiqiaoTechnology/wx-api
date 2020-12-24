@@ -22,9 +22,9 @@ import com.github.niefy.common.utils.R;
  * @email niefy@qq.com
  * @date 2019-11-12 18:30:16
  */
-@RestController
-@RequestMapping("/manage/article")
-@Api(tags = {"文章管理-管理后台"})
+//@RestController
+//@RequestMapping("/manage/article")
+//@Api(tags = {"文章管理-管理后台"})
 public class ArticleManageController {
     @Autowired
     private ArticleService articleService;

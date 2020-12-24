@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/manage/wxMsg")
-@Api(tags = {"公众号消息记录-管理后台"})
+@Api(tags = {"a岑璐要的接口-公众号消息记录-管理后台"})
 public class WxMsgManageController {
     @Autowired
     private WxMsgService wxMsgService;

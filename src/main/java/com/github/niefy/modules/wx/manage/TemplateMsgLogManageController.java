@@ -23,9 +23,9 @@ import com.github.niefy.common.utils.R;
  * @email niefy@qq.com
  * @date 2019-11-12 18:30:15
  */
-@RestController
-@RequestMapping("/manage/templateMsgLog")
-@Api(tags = {"模板消息发送记录-管理后台"})
+//@RestController
+//@RequestMapping("/manage/templateMsgLog")
+//@Api(tags = {"模板消息发送记录-管理后台"})
 public class TemplateMsgLogManageController {
     @Autowired
     private TemplateMsgLogService templateMsgLogService;

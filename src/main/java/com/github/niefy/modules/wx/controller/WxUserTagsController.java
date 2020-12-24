@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/wxUserTags")
 @RequiredArgsConstructor
-@Api(tags = {"粉丝标签"})
+@Api(tags = {"a岑璐要的接口-粉丝标签"})
 public class WxUserTagsController {
     @Autowired
     WxUserTagsService wxUserTagsService;

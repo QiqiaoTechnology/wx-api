@@ -23,9 +23,9 @@ import java.util.Map;
  * 公众号带参二维码管理
  * https://github.com/Wechat-Group/WxJava/wiki/MP_二维码管理
  */
-@RestController
-@RequestMapping("/manage/wxQrCode")
-@Api(tags = {"公众号带参二维码-管理后台"})
+//@RestController
+//@RequestMapping("/manage/wxQrCode")
+//@Api(tags = {"公众号带参二维码-管理后台"})
 public class WxQrCodeManageController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 

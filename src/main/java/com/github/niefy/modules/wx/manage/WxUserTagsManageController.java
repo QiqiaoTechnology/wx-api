@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/manage/wxUserTags")
-@Api(tags = {"公众号用户标签-管理后台"})
+@Api(tags = {"a岑璐要的接口-公众号用户标签-管理后台"})
 public class WxUserTagsManageController {
     @Autowired
     private WxUserService wxUserService;

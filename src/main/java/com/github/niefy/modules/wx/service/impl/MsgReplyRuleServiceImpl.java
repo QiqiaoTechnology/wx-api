@@ -3,11 +3,11 @@ package com.github.niefy.modules.wx.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.niefy.modules.wx.service.MsgReplyRuleService;
 import com.github.niefy.common.utils.PageUtils;
 import com.github.niefy.common.utils.Query;
-import com.github.niefy.modules.wx.entity.MsgReplyRule;
 import com.github.niefy.modules.wx.dao.MsgReplyRuleMapper;
+import com.github.niefy.modules.wx.entity.MsgReplyRule;
+import com.github.niefy.modules.wx.service.MsgReplyRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -27,13 +27,13 @@ public class MsgReplyRuleServiceImpl extends ServiceImpl<MsgReplyRuleMapper, Msg
         String matchValue = (String) params.get("matchValue");
         String appid = (String) params.get("appid");
         IPage<MsgReplyRule> page = this.page(
-            new Query<MsgReplyRule>().getPage(params),
-            new QueryWrapper<MsgReplyRule>()
-                    .eq(StringUtils.hasText(appid), "appid", appid)
-                    .or()
-                    .apply("appid is null or appid = ''")
-                    .like(StringUtils.hasText(matchValue), "match_value", matchValue)
-                    .orderByDesc("update_time")
+                new Query<MsgReplyRule>().getPage(params),
+                new QueryWrapper<MsgReplyRule>()
+                        .eq(StringUtils.hasText(appid), "appid", appid)
+                        .or()
+                        .apply("appid is null or appid = ''")
+                        .like(StringUtils.hasText(matchValue), "match_value", matchValue)
+                        .orderByDesc("update_time")
         );
 
         return new PageUtils(page);
@@ -66,6 +66,22 @@ public class MsgReplyRuleServiceImpl extends ServiceImpl<MsgReplyRuleMapper, Msg
     }
 
     /**
+     * 获取默认的回复规则
+     *
+     * @return
+     */
+    @Override
+    public List<MsgReplyRule> getDefaultRules() {
+        return msgReplyRuleMapper.selectList(
+                new QueryWrapper<MsgReplyRule>()
+                        .eq("status", 1)
+                        .eq("match_value", "default")
+//                        .isNotNull("match_value")
+//                        .ne("match_value", "")
+                        .orderByDesc("priority"));
+    }
+
+    /**
      * 获取当前时段内所有有效的回复规则
      *
      * @return
@@ -73,18 +89,17 @@ public class MsgReplyRuleServiceImpl extends ServiceImpl<MsgReplyRuleMapper, Msg
     @Override
     public List<MsgReplyRule> getValidRules() {
         return msgReplyRuleMapper.selectList(
-            new QueryWrapper<MsgReplyRule>()
-                .eq("status", 1)
-                .isNotNull("match_value")
-                .ne("match_value", "")
-                .orderByDesc("priority"));
+                new QueryWrapper<MsgReplyRule>()
+                        .eq("status", 1)
+                        .isNotNull("match_value")
+                        .ne("match_value", "")
+                        .orderByDesc("priority"));
     }
 
     /**
      * 筛选符合条件的回复规则
      *
-     *
-     * @param appid 公众号appid
+     * @param appid      公众号appid
      * @param exactMatch 是否精确匹配
      * @param keywords   关键词
      * @return 规则列表
@@ -92,12 +107,22 @@ public class MsgReplyRuleServiceImpl extends ServiceImpl<MsgReplyRuleMapper, Msg
     @Override
     public List<MsgReplyRule> getMatchedRules(String appid, boolean exactMatch, String keywords) {
         LocalTime now = LocalTime.now();
-        return this.getValidRules().stream()
-                .filter(rule->!StringUtils.hasText(rule.getAppid()) || appid.equals(rule.getAppid())) // 检测是否是对应公众号的规则，如果appid为空则为通用规则
-                .filter(rule->null == rule.getEffectTimeStart() || rule.getEffectTimeStart().toLocalTime().isBefore(now))// 检测是否在有效时段，effectTimeStart为null则一直有效
-                .filter(rule->null == rule.getEffectTimeEnd() || rule.getEffectTimeEnd().toLocalTime().isAfter(now)) // 检测是否在有效时段，effectTimeEnd为null则一直有效
-                .filter(rule->isMatch(exactMatch || rule.isExactMatch(),rule.getMatchValue().split(","),keywords)) //检测是否符合匹配规则
+
+        List<MsgReplyRule> list = this.getValidRules().stream()
+                .filter(rule -> !StringUtils.hasText(rule.getAppid()) || appid.equals(rule.getAppid())) // 检测是否是对应公众号的规则，如果appid为空则为通用规则
+                .filter(rule -> null == rule.getEffectTimeStart() || rule.getEffectTimeStart().toLocalTime().isBefore(now))// 检测是否在有效时段，effectTimeStart为null则一直有效
+                .filter(rule -> null == rule.getEffectTimeEnd() || rule.getEffectTimeEnd().toLocalTime().isAfter(now)) // 检测是否在有效时段，effectTimeEnd为null则一直有效
+                .filter(rule -> isMatch(exactMatch || rule.isExactMatch(), rule.getMatchValue().split(","), keywords)) //检测是否符合匹配规则
                 .collect(Collectors.toList());
+
+        if (list.isEmpty()) {
+            list = this.getDefaultRules().stream()
+                    .filter(rule -> !StringUtils.hasText(rule.getAppid()) || appid.equals(rule.getAppid())) // 检测是否是对应公众号的规则，如果appid为空则为通用规则
+                    .filter(rule -> null == rule.getEffectTimeStart() || rule.getEffectTimeStart().toLocalTime().isBefore(now))// 检测是否在有效时段，effectTimeStart为null则一直有效
+                    .filter(rule -> null == rule.getEffectTimeEnd() || rule.getEffectTimeEnd().toLocalTime().isAfter(now)) // 检测是否在有效时段，effectTimeEnd为null则一直有效
+                    .collect(Collectors.toList());
+        }
+        return list;
     }
 
     /**

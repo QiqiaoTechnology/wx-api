@@ -37,6 +37,12 @@ public interface MsgReplyRuleService extends IService<MsgReplyRule> {
      * @return 有效的规则列表
      */
     List<MsgReplyRule> getValidRules();
+    /**
+     * 获取默认的回复规则
+     *
+     * @return 有效的规则列表
+     */
+    List<MsgReplyRule> getDefaultRules();
 
     /**
      * 筛选符合条件的回复规则

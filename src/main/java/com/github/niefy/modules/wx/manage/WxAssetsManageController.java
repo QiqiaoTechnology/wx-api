@@ -24,7 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/manage/wxAssets")
-@Api(tags = {"公众号素材-管理后台"})
+@Api(tags = {"a岑璐要的接口-公众号素材-管理后台"})
 public class WxAssetsManageController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired

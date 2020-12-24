@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/manage/wxUser")
-@Api(tags = {"公众号粉丝-管理后台"})
+@Api(tags = {"a岑璐要的接口-公众号粉丝-管理后台"})
 public class WxUserManageController {
     @Autowired
     private WxUserService userService;

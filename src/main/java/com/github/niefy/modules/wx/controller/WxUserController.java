@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/wxUser")
 @RequiredArgsConstructor
-@Api(tags = {"微信粉丝"})
+@Api(tags = {"a岑璐要的接口-微信粉丝"})
 public class WxUserController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired

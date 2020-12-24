@@ -18,9 +18,9 @@ import java.util.List;
 /**
  * cms文章
  */
-@RestController
-@RequestMapping("/article")
-@Api(tags = {"CMS文章"})
+//@RestController
+//@RequestMapping("/article")
+//@Api(tags = {"CMS文章"})
 public class ArticleController {
     @Autowired
     ArticleService articleService;

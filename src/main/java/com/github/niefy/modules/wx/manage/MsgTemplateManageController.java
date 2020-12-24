@@ -28,9 +28,9 @@ import com.github.niefy.common.utils.R;
  * @email niefy@qq.com
  * @date 2019-11-12 18:30:15
  */
-@RestController
-@RequestMapping("/manage/msgTemplate")
-@Api(tags = {"消息模板-管理后台","模板消息的模板"})
+//@RestController
+//@RequestMapping("/manage/msgTemplate")
+//@Api(tags = {"消息模板-管理后台","模板消息的模板"})
 public class MsgTemplateManageController {
     @Autowired
     private MsgTemplateService msgTemplateService;

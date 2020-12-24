@@ -1,8 +1,8 @@
 package com.github.niefy.modules.wx.manage;
 
-import java.util.Arrays;
-import java.util.Map;
-
+import com.github.niefy.common.utils.PageUtils;
+import com.github.niefy.common.utils.R;
+import com.github.niefy.modules.wx.entity.MsgReplyRule;
 import com.github.niefy.modules.wx.service.MsgReplyRuleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,9 +11,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.niefy.modules.wx.entity.MsgReplyRule;
-import com.github.niefy.common.utils.PageUtils;
-import com.github.niefy.common.utils.R;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -25,7 +24,7 @@ import com.github.niefy.common.utils.R;
  */
 @RestController
 @RequestMapping("/manage/msgReplyRule")
-@Api(tags = {"自动回复规则-管理后台"})
+@Api(tags = {"a岑璐要的接口-自动回复规则-管理后台"})
 public class MsgReplyRuleManageController {
     @Autowired
     private MsgReplyRuleService msgReplyRuleService;
@@ -38,8 +37,8 @@ public class MsgReplyRuleManageController {
     @GetMapping("/list")
     @RequiresPermissions("wx:msgreplyrule:list")
     @ApiOperation(value = "列表")
-    public R list(@CookieValue String appid,@RequestParam Map<String, Object> params) {
-        params.put("appid",appid);
+    public R list(@CookieValue String appid, @RequestParam Map<String, Object> params) {
+        params.put("appid", appid);
         PageUtils page = msgReplyRuleService.queryPage(params);
 
         return R.ok().put("page", page);
