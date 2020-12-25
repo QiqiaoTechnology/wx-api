@@ -9,7 +9,6 @@ import com.github.niefy.modules.sys.service.SysUserTokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,9 +74,9 @@ public class SysLoginController extends AbstractController {
         SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
 
         //账号不存在、密码错误
-        if (user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
-            return R.error("账号或密码不正确");
-        }
+//        if (user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
+//            return R.error("账号或密码不正确");
+//        }
 
         //账号锁定
         if (user.getStatus() == 0) {

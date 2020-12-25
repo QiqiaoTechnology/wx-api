@@ -2,12 +2,10 @@ package com.github.niefy.common.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.github.niefy.common.annotation.SysLog;
+import com.github.niefy.common.utils.HttpContextUtils;
 import com.github.niefy.common.utils.IPUtils;
 import com.github.niefy.modules.sys.entity.SysLogEntity;
-import com.github.niefy.modules.sys.entity.SysUserEntity;
 import com.github.niefy.modules.sys.service.SysLogService;
-import com.github.niefy.common.utils.HttpContextUtils;
-import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,6 +23,7 @@ import java.util.Date;
 
 /**
  * 系统日志，切面处理类
+ *
  * @author Mark sunlightcs@gmail.com
  */
 @Aspect
@@ -84,7 +83,7 @@ public class SysLogAspect {
         sysLog.setIp(IPUtils.getIpAddr(request));
 
         //用户名
-        String username = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getUsername();
+        String username = "admin";
         sysLog.setUsername(username);
 
         sysLog.setTime(time);

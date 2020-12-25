@@ -7,7 +7,6 @@ import com.github.niefy.modules.wx.service.MsgReplyRuleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.chanjar.weixin.mp.api.WxMpService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +34,7 @@ public class MsgReplyRuleManageController {
      * 列表
      */
     @GetMapping("/list")
-    @RequiresPermissions("wx:msgreplyrule:list")
+    //@RequiresPermissions("wx:msgreplyrule:list")
     @ApiOperation(value = "列表")
     public R list(@CookieValue String appid, @RequestParam Map<String, Object> params) {
         params.put("appid", appid);
@@ -49,7 +48,7 @@ public class MsgReplyRuleManageController {
      * 信息
      */
     @GetMapping("/info/{ruleId}")
-    @RequiresPermissions("wx:msgreplyrule:info")
+    //@RequiresPermissions("wx:msgreplyrule:info")
     @ApiOperation(value = "详情")
     public R info(@PathVariable("ruleId") Integer ruleId) {
         MsgReplyRule msgReplyRule = msgReplyRuleService.getById(ruleId);
@@ -61,7 +60,7 @@ public class MsgReplyRuleManageController {
      * 保存
      */
     @PostMapping("/save")
-    @RequiresPermissions("wx:msgreplyrule:save")
+    //@RequiresPermissions("wx:msgreplyrule:save")
     @ApiOperation(value = "保存")
     public R save(@RequestBody MsgReplyRule msgReplyRule) {
         msgReplyRuleService.save(msgReplyRule);
@@ -73,7 +72,7 @@ public class MsgReplyRuleManageController {
      * 修改
      */
     @PostMapping("/update")
-    @RequiresPermissions("wx:msgreplyrule:update")
+    //@RequiresPermissions("wx:msgreplyrule:update")
     @ApiOperation(value = "修改")
     public R update(@RequestBody MsgReplyRule msgReplyRule) {
         msgReplyRuleService.updateById(msgReplyRule);
@@ -85,7 +84,7 @@ public class MsgReplyRuleManageController {
      * 删除
      */
     @PostMapping("/delete")
-    @RequiresPermissions("wx:msgreplyrule:delete")
+    //@RequiresPermissions("wx:msgreplyrule:delete")
     @ApiOperation(value = "删除")
     public R delete(@RequestBody Integer[] ruleIds) {
         msgReplyRuleService.removeByIds(Arrays.asList(ruleIds));

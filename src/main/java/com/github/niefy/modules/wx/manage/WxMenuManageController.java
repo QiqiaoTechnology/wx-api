@@ -1,18 +1,19 @@
 package com.github.niefy.modules.wx.manage;
 
 import com.github.niefy.common.utils.R;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.menu.WxMpMenu;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 微信公众号菜单管理
@@ -44,9 +45,9 @@ public class WxMenuManageController {
      * 创建、更新菜单
      */
     @PostMapping("/updateMenu")
-    @RequiresPermissions("wx:menu:save")
+    //@RequiresPermissions("wx:menu:save")
     @ApiOperation(value = "创建、更新菜单")
-    public R updateMenu(@CookieValue String appid,@RequestBody WxMenu wxMenu) throws WxErrorException {
+    public R updateMenu(@CookieValue String appid, @RequestBody WxMenu wxMenu) throws WxErrorException {
         wxMpService.switchoverTo(appid);
         wxService.getMenuService().menuCreate(wxMenu);
         return R.ok();

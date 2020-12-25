@@ -10,7 +10,6 @@ import com.github.niefy.modules.sys.service.SysMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +19,7 @@ import java.util.Set;
 
 /**
  * 系统菜单
+ *
  * @author Mark sunlightcs@gmail.com
  */
 @RestController
@@ -35,7 +35,7 @@ public class SysMenuController extends AbstractController {
      * 导航菜单
      */
     @GetMapping("/nav")
-    @ApiOperation(value = "管理后台导航菜单",notes = "不同登录用户结果不同")
+    @ApiOperation(value = "管理后台导航菜单", notes = "不同登录用户结果不同")
     public R nav() {
         List<SysMenuEntity> menuList = sysMenuService.getUserMenuList(getUserId());
         Set<String> permissions = shiroService.getUserPermissions(getUserId());
@@ -46,8 +46,8 @@ public class SysMenuController extends AbstractController {
      * 所有菜单列表
      */
     @GetMapping("/list")
-    @RequiresPermissions("sys:menu:list")
-    @ApiOperation(value = "管理后台菜单列表",notes = "超级管理员可看到全部列表")
+    //@RequiresPermissions("sys:menu:list")
+    @ApiOperation(value = "管理后台菜单列表", notes = "超级管理员可看到全部列表")
     public List<SysMenuEntity> list() {
         List<SysMenuEntity> menuList;
         // 超级管理员
@@ -70,8 +70,8 @@ public class SysMenuController extends AbstractController {
      * 选择菜单(添加、修改菜单)
      */
     @GetMapping("/select")
-    @RequiresPermissions("sys:menu:select")
-    @ApiOperation(value = "选择菜单",notes = "")
+    //@RequiresPermissions("sys:menu:select")
+    @ApiOperation(value = "选择菜单", notes = "")
     public R select() {
         //查询列表数据
         List<SysMenuEntity> menuList = sysMenuService.queryNotButtonList();
@@ -91,8 +91,8 @@ public class SysMenuController extends AbstractController {
      * 菜单信息
      */
     @GetMapping("/info/{menuId}")
-    @RequiresPermissions("sys:menu:info")
-    @ApiOperation(value = "菜单详情",notes = "")
+    //@RequiresPermissions("sys:menu:info")
+    @ApiOperation(value = "菜单详情", notes = "")
     public R info(@PathVariable("menuId") Long menuId) {
         SysMenuEntity menu = sysMenuService.getById(menuId);
         return R.ok().put("menu", menu);
@@ -103,8 +103,8 @@ public class SysMenuController extends AbstractController {
      */
     @SysLog("保存菜单")
     @PostMapping("/save")
-    @RequiresPermissions("sys:menu:save")
-    @ApiOperation(value = "保存菜单",notes = "")
+    //@RequiresPermissions("sys:menu:save")
+    @ApiOperation(value = "保存菜单", notes = "")
     public R save(@RequestBody SysMenuEntity menu) {
         //数据校验
         verifyForm(menu);
@@ -119,8 +119,8 @@ public class SysMenuController extends AbstractController {
      */
     @SysLog("修改菜单")
     @PostMapping("/update")
-    @RequiresPermissions("sys:menu:update")
-    @ApiOperation(value = "修改菜单",notes = "")
+    //@RequiresPermissions("sys:menu:update")
+    @ApiOperation(value = "修改菜单", notes = "")
     public R update(@RequestBody SysMenuEntity menu) {
         //数据校验
         verifyForm(menu);
@@ -135,8 +135,8 @@ public class SysMenuController extends AbstractController {
      */
     @SysLog("删除菜单")
     @PostMapping("/delete/{menuId}")
-    @RequiresPermissions("sys:menu:delete")
-    @ApiOperation(value = "删除菜单",notes = "")
+    //@RequiresPermissions("sys:menu:delete")
+    @ApiOperation(value = "删除菜单", notes = "")
     public R delete(@PathVariable("menuId") long menuId) {
         if (menuId <= 31) {
             return R.error("系统菜单，不能删除");
@@ -181,7 +181,7 @@ public class SysMenuController extends AbstractController {
 
         //目录、菜单
         if (menu.getType() == Constant.MenuType.CATALOG.getValue() ||
-            menu.getType() == Constant.MenuType.MENU.getValue()) {
+                menu.getType() == Constant.MenuType.MENU.getValue()) {
             if (parentType != Constant.MenuType.CATALOG.getValue()) {
                 throw new RRException("上级菜单只能为目录类型");
             }

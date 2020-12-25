@@ -17,7 +17,6 @@ import com.github.niefy.modules.oss.service.SysOssService;
 import com.github.niefy.modules.sys.service.SysConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +28,7 @@ import java.util.Objects;
 
 /**
  * 文件上传
+ *
  * @author Mark sunlightcs@gmail.com
  */
 @RestController
@@ -45,9 +45,9 @@ public class SysOssController {
     /**
      * 列表
      */
-    @ApiOperation(value = "文件列表",notes = "对象存储管理的文件")
+    @ApiOperation(value = "文件列表", notes = "对象存储管理的文件")
     @GetMapping("/list")
-    @RequiresPermissions("sys:oss:all")
+    //@RequiresPermissions("sys:oss:all")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = sysOssService.queryPage(params);
 
@@ -59,8 +59,8 @@ public class SysOssController {
      * 云存储配置信息
      */
     @GetMapping("/config")
-    @RequiresPermissions("sys:oss:all")
-    @ApiOperation(value = "云存储配置信息",notes = "首次使用前先管理后台新增配置")
+    //@RequiresPermissions("sys:oss:all")
+    @ApiOperation(value = "云存储配置信息", notes = "首次使用前先管理后台新增配置")
     public R config() {
         CloudStorageConfig config = sysConfigService.getConfigObject(KEY, CloudStorageConfig.class);
 
@@ -72,7 +72,7 @@ public class SysOssController {
      * 保存云存储配置信息
      */
     @PostMapping("/saveConfig")
-    @RequiresPermissions("sys:oss:all")
+    //@RequiresPermissions("sys:oss:all")
     @ApiOperation(value = "保存云存储配置信息")
     public R saveConfig(@RequestBody CloudStorageConfig config) {
         //校验类型
@@ -99,7 +99,7 @@ public class SysOssController {
      * 上传文件
      */
     @PostMapping("/upload")
-    @RequiresPermissions("sys:oss:all")
+    //@RequiresPermissions("sys:oss:all")
     @ApiOperation(value = "上传文件到OSS")
     public R upload(@RequestParam("file") MultipartFile file) throws Exception {
         if (file.isEmpty()) {
@@ -124,8 +124,8 @@ public class SysOssController {
      * 删除
      */
     @PostMapping("/delete")
-    @RequiresPermissions("sys:oss:all")
-    @ApiOperation(value = "删除文件",notes = "只删除记录，云端文件不会删除")
+    //@RequiresPermissions("sys:oss:all")
+    @ApiOperation(value = "删除文件", notes = "只删除记录，云端文件不会删除")
     public R delete(@RequestBody Long[] ids) {
         sysOssService.removeByIds(Arrays.asList(ids));
 

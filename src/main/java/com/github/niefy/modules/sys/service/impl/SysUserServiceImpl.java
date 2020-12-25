@@ -3,18 +3,17 @@ package com.github.niefy.modules.sys.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.niefy.common.exception.RRException;
 import com.github.niefy.common.utils.Constant;
+import com.github.niefy.common.utils.PageUtils;
+import com.github.niefy.common.utils.Query;
 import com.github.niefy.modules.sys.dao.SysUserDao;
 import com.github.niefy.modules.sys.entity.SysUserEntity;
 import com.github.niefy.modules.sys.service.SysRoleService;
 import com.github.niefy.modules.sys.service.SysUserRoleService;
 import com.github.niefy.modules.sys.service.SysUserService;
-import com.github.niefy.common.exception.RRException;
-import com.github.niefy.common.utils.PageUtils;
-import com.github.niefy.common.utils.Query;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +26,7 @@ import java.util.Map;
 
 /**
  * 系统用户
+ *
  * @author Mark sunlightcs@gmail.com
  */
 @Service("sysUserService")
@@ -42,10 +42,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         Long createUserId = (Long) params.get("createUserId");
 
         IPage<SysUserEntity> page = this.page(
-            new Query<SysUserEntity>().getPage(params),
-            new QueryWrapper<SysUserEntity>()
-                .like(StringUtils.isNotBlank(username), "username", username)
-                .eq(createUserId != null, "create_user_id", createUserId)
+                new Query<SysUserEntity>().getPage(params),
+                new QueryWrapper<SysUserEntity>()
+                        .like(StringUtils.isNotBlank(username), "username", username)
+                        .eq(createUserId != null, "create_user_id", createUserId)
         );
 
         return new PageUtils(page);
@@ -72,7 +72,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         user.setCreateTime(new Date());
         //sha256加密
         String salt = RandomStringUtils.randomAlphanumeric(20);
-        user.setPassword(new Sha256Hash(user.getPassword(), salt).toHex());
+//        user.setPassword(new Sha256Hash(user.getPassword(), salt).toHex());
+        user.setPassword("123456");
         user.setSalt(salt);
         this.save(user);
 
@@ -89,7 +90,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         if (StringUtils.isBlank(user.getPassword())) {
             user.setPassword(null);
         } else {
-            user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt()).toHex());
+            user.setPassword("123456");
+//            user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt()).toHex());
         }
         this.updateById(user);
 
@@ -110,7 +112,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         SysUserEntity userEntity = new SysUserEntity();
         userEntity.setPassword(newPassword);
         return this.update(userEntity,
-            new QueryWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
+                new QueryWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
     }
 
     /**
