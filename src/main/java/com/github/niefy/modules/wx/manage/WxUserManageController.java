@@ -8,6 +8,8 @@ import com.github.niefy.modules.wx.entity.WxUser;
 import com.github.niefy.modules.wx.service.WxUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +34,7 @@ public class WxUserManageController {
     private WxUserService userService;
     @Autowired
     WxMpInfo wxMpInfo;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 列表

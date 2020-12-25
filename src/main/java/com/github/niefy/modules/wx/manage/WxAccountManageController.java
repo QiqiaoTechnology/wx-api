@@ -1,10 +1,15 @@
 package com.github.niefy.modules.wx.manage;
 
 import com.github.niefy.common.utils.R;
+import com.github.niefy.common.utils.StringUtil;
+import com.github.niefy.modules.wx.dto.WxMpInfo;
 import com.github.niefy.modules.wx.entity.WxAccount;
 import com.github.niefy.modules.wx.service.WxAccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import me.chanjar.weixin.mp.api.WxMpService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +28,12 @@ import java.util.List;
 @Api(tags = {"a岑璐要的接口-公众号账号管理后台"})
 public class WxAccountManageController {
     @Autowired
+    WxMpService wxMpService;
+    @Autowired
     private WxAccountService wxAccountService;
+    @Autowired
+    WxMpInfo wxMpInfo;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 列表
@@ -59,6 +69,15 @@ public class WxAccountManageController {
     public R save(@RequestBody WxAccount wxAccount) {
         wxAccountService.save(wxAccount);
 
+        String appid = wxMpInfo.getAppId();
+        String newAppid = wxAccount.getAppid();
+
+        logger.info("WxAccountManageController.save appid={},newAppid={}", appid, newAppid);
+        if (StringUtil.isNotBlank(newAppid) && !appid.equals(newAppid)) {
+            wxMpService.removeConfigStorage(appid);
+            wxMpInfo.setAppId(newAppid);
+        }
+        logger.info("WxAccountManageController.save newAppid={}", wxMpInfo.getAppId());
         return R.ok();
     }
 
