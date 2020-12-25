@@ -1,6 +1,7 @@
 package com.github.niefy.modules.wx.manage;
 
 import com.github.niefy.common.utils.R;
+import com.github.niefy.modules.wx.dto.MaterialNewsDto;
 import com.github.niefy.modules.wx.dto.WxMpInfo;
 import com.github.niefy.modules.wx.form.MaterialFileDeleteForm;
 import com.github.niefy.modules.wx.service.WxAssetsService;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -96,7 +99,31 @@ public class WxAssetsManageController {
         String appid = wxMpInfo.getAppId();
 
         WxMpMaterialNewsBatchGetResult res = wxAssetsService.materialNewsBatchGet(appid, page);
-        return R.ok().put(res);
+        MaterialNewsDto result = new MaterialNewsDto();
+        result.setTotalCount(res.getTotalCount());
+        result.setItemCount(res.getItemCount());
+        List<HashMap> mapList = new ArrayList<>();
+        for (WxMpMaterialNewsBatchGetResult.WxMaterialNewsBatchGetNewsItem item : res.getItems()) {
+            HashMap map = new HashMap();
+            map.put("mediaId", item.getMediaId());
+            map.put("updateTime", item.getMediaId());
+            map.put("thumbMediaId", item.getContent().getArticles().get(0).getThumbMediaId());
+
+            map.put("thumbUrl", item.getContent().getArticles().get(0).getThumbUrl());
+            map.put("author", item.getContent().getArticles().get(0).getAuthor());
+            map.put("title", item.getContent().getArticles().get(0).getTitle());
+            map.put("contentSourceUrl", item.getContent().getArticles().get(0).getContentSourceUrl());
+            map.put("content", item.getContent().getArticles().get(0).getContent());
+            map.put("digest", item.getContent().getArticles().get(0).getDigest());
+            map.put("showCoverPic", item.getContent().getArticles().get(0).isShowCoverPic());
+            map.put("url", item.getContent().getArticles().get(0).getUrl());
+            map.put("needOpenComment", item.getContent().getArticles().get(0).getNeedOpenComment());
+            map.put("onlyFansCanComment", item.getContent().getArticles().get(0).getOnlyFansCanComment());
+
+            mapList.add(map);
+        }
+        result.setItems(mapList);
+        return R.ok().put(result);
     }
 
     /**
