@@ -69,15 +69,15 @@ public class WxAccountManageController {
     public R save(@RequestBody WxAccount wxAccount) {
         wxAccountService.save(wxAccount);
 
-        String appid = wxMpInfo.getAppId();
-        String newAppid = wxAccount.getAppid();
-
-        logger.info("WxAccountManageController.save appid={},newAppid={}", appid, newAppid);
-        if (StringUtil.isNotBlank(newAppid) && !appid.equals(newAppid)) {
-            wxMpService.removeConfigStorage(appid);
-            wxMpInfo.setAppId(newAppid);
-        }
-        logger.info("WxAccountManageController.save newAppid={}", wxMpInfo.getAppId());
+//        String appid = wxMpInfo.getAppId();
+//        String newAppid = wxAccount.getAppid();
+//
+//        logger.info("WxAccountManageController.save appid={},newAppid={}", appid, newAppid);
+//        if (StringUtil.isNotBlank(newAppid) && !appid.equals(newAppid)) {
+//            wxMpService.removeConfigStorage(appid);
+//            wxMpInfo.setAppId(newAppid);
+//        }
+//        logger.info("WxAccountManageController.save newAppid={}", wxMpInfo.getAppId());
         return R.ok();
     }
 

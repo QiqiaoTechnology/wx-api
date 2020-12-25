@@ -75,9 +75,13 @@ public class WxAccountServiceImpl extends ServiceImpl<WxAccountMapper, WxAccount
             this.addAccountToRuntime(entity);
 
             return SqlHelper.retBool(this.baseMapper.updateById(entity));
-        } else {//已有此appid信息，新增
+        } else {//没有此appid信息，新增
+            wxMpService.removeConfigStorage(wxMpInfo.getAppId());
+            SqlHelper.retBool(this.baseMapper.deleteById(wxMpInfo.getAppId()));
+
             logger.info("新增公众号配置");
             this.addAccountToRuntime(entity);
+            wxMpInfo.setAppId(entity.getAppid());
 
             return SqlHelper.retBool(this.baseMapper.insert(entity));
         }
