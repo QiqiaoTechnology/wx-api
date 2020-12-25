@@ -2,6 +2,7 @@ package com.github.niefy.modules.wx.manage;
 
 import com.github.niefy.common.utils.PageUtils;
 import com.github.niefy.common.utils.R;
+import com.github.niefy.modules.wx.dto.WxMpInfo;
 import com.github.niefy.modules.wx.entity.MsgReplyRule;
 import com.github.niefy.modules.wx.service.MsgReplyRuleService;
 import io.swagger.annotations.Api;
@@ -29,6 +30,8 @@ public class MsgReplyRuleManageController {
     private MsgReplyRuleService msgReplyRuleService;
     @Autowired
     private WxMpService wxMpService;
+    @Autowired
+    WxMpInfo wxMpInfo;
 
     /**
      * 列表
@@ -36,7 +39,9 @@ public class MsgReplyRuleManageController {
     @GetMapping("/list")
     //@RequiresPermissions("wx:msgreplyrule:list")
     @ApiOperation(value = "列表")
-    public R list(@CookieValue String appid, @RequestParam Map<String, Object> params) {
+    public R list(@RequestParam Map<String, Object> params) {
+        String appid = wxMpInfo.getAppId();
+
         params.put("appid", appid);
         PageUtils page = msgReplyRuleService.queryPage(params);
 

@@ -2,6 +2,7 @@ package com.github.niefy.modules.wx.controller;
 
 import com.github.niefy.common.utils.*;
 import com.github.niefy.modules.sys.service.SysLogService;
+import com.github.niefy.modules.wx.dto.WxMpInfo;
 import com.github.niefy.modules.wx.entity.WxUser;
 import com.github.niefy.modules.wx.form.WxH5OuthrizeForm;
 import io.swagger.annotations.Api;
@@ -36,7 +37,8 @@ public class WxAuthController {
     @Autowired
     SysLogService sysLogService;
     private final WxMpService wxMpService;
-
+    @Autowired
+    WxMpInfo wxMpInfo;
     /**
      * 使用微信授权code换取openid
      *
@@ -49,7 +51,9 @@ public class WxAuthController {
     @CrossOrigin
     @ApiOperation(value = "网页登录-code换取openid",notes = "scope为snsapi_base")
     public R codeToOpenid(HttpServletRequest request, HttpServletResponse response,
-                          @CookieValue String appid, @RequestBody WxH5OuthrizeForm form) {
+                         @RequestBody WxH5OuthrizeForm form) {
+        String appid = wxMpInfo.getAppId();
+
         try {
             this.wxMpService.switchoverTo(appid);
             WxOAuth2AccessToken token = wxMpService.getOAuth2Service().getAccessToken(form.getCode());
@@ -76,7 +80,9 @@ public class WxAuthController {
     @CrossOrigin
     @ApiOperation(value = "网页登录-code换取用户信息",notes = "需scope为 snsapi_userinfo")
     public R codeToUserInfo(HttpServletRequest request, HttpServletResponse response,
-                            @CookieValue String appid,  @RequestBody WxH5OuthrizeForm form) {
+                            @RequestBody WxH5OuthrizeForm form) {
+        String appid = wxMpInfo.getAppId();
+
         try {
             this.wxMpService.switchoverTo(appid);
             WxOAuth2AccessToken token = wxMpService.getOAuth2Service().getAccessToken(form.getCode());
@@ -102,7 +108,9 @@ public class WxAuthController {
      */
     @GetMapping("/getShareSignature")
     @ApiOperation(value = "获取微信分享的签名配置",notes = "微信公众号添加了js安全域名的网站才能加载微信分享")
-    public R getShareSignature(HttpServletRequest request, HttpServletResponse response,@CookieValue String appid) throws WxErrorException {
+    public R getShareSignature(HttpServletRequest request, HttpServletResponse response) throws WxErrorException {
+        String appid = wxMpInfo.getAppId();
+
         this.wxMpService.switchoverTo(appid);
         // 1.拼接url（当前网页的URL，不包含#及其后面部分）
         String wxShareUrl = request.getHeader(Constant.WX_CLIENT_HREF_HEADER);

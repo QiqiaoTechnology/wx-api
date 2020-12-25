@@ -3,6 +3,7 @@ package com.github.niefy.modules.wx.manage;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.niefy.common.utils.PageUtils;
 import com.github.niefy.common.utils.R;
+import com.github.niefy.modules.wx.dto.WxMpInfo;
 import com.github.niefy.modules.wx.entity.WxUser;
 import com.github.niefy.modules.wx.service.WxUserService;
 import io.swagger.annotations.Api;
@@ -29,22 +30,26 @@ import java.util.Map;
 public class WxUserManageController {
     @Autowired
     private WxUserService userService;
+    @Autowired
+    WxMpInfo wxMpInfo;
 
     /**
      * 列表
      */
-    @PostMapping("/list")
+    @GetMapping("/list")
     //@RequiresPermissions("wx:wxuser:list")
     @ApiOperation(value = "列表")
 //    public R list(@CookieValue String appid, @RequestParam Map<String, Object> params) {
-    public R list(@RequestParam("appid") String appid
+    public R list(
+//            @RequestParam("appid") String appid
 //            ,@RequestParam("totalCount") int totalCount
 //            ,@RequestParam("totalPage") int totalPage
-            , @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
             , @RequestParam(value = "currPage", required = false, defaultValue = "1") int currPage) {
         Map<String, Object> params = new HashMap<>();
 //        params.put("totalCount", totalCount);
 //        params.put("totalPage", totalPage);
+        String appid = wxMpInfo.getAppId();
         params.put("pageSize", pageSize);
         params.put("currPage", currPage);
         params.put("appid", appid);
@@ -60,7 +65,8 @@ public class WxUserManageController {
     @PostMapping("/listByIds")
     //@RequiresPermissions("wx:wxuser:list")
     @ApiOperation(value = "列表-ID查询")
-    public R listByIds(@CookieValue String appid, @RequestBody String[] openids) {
+    public R listByIds(@RequestBody String[] openids) {
+
         List<WxUser> users = userService.listByIds(Arrays.asList(openids));
         return R.ok().put(users);
     }
@@ -72,7 +78,7 @@ public class WxUserManageController {
     @GetMapping("/info/{openid}")
     //@RequiresPermissions("wx:wxuser:info")
     @ApiOperation(value = "详情")
-    public R info(@CookieValue String appid, @PathVariable("openid") String openid) {
+    public R info(@PathVariable("openid") String openid) {
         WxUser wxUser = userService.getById(openid);
 
         return R.ok().put("wxUser", wxUser);
@@ -84,7 +90,8 @@ public class WxUserManageController {
     @PostMapping("/syncWxUsers")
     //@RequiresPermissions("wx:wxuser:save")
     @ApiOperation(value = "同步用户列表到数据库")
-    public R syncWxUsers(@RequestBody String appid) {
+    public R syncWxUsers() {
+        String appid = wxMpInfo.getAppId();
         userService.syncWxUsers(appid);
 
         return R.ok("任务已建立");
@@ -97,7 +104,7 @@ public class WxUserManageController {
     @PostMapping("/delete")
     //@RequiresPermissions("wx:wxuser:delete")
     @ApiOperation(value = "删除")
-    public R delete(@CookieValue String appid, @RequestBody String[] ids) {
+    public R delete(@RequestBody String[] ids) {
         userService.removeByIds(Arrays.asList(ids));
 
         return R.ok();

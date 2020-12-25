@@ -2,6 +2,7 @@ package com.github.niefy.modules.wx.manage;
 
 import com.github.niefy.common.utils.PageUtils;
 import com.github.niefy.common.utils.R;
+import com.github.niefy.modules.wx.dto.WxMpInfo;
 import com.github.niefy.modules.wx.entity.WxMsg;
 import com.github.niefy.modules.wx.form.WxMsgReplyForm;
 import com.github.niefy.modules.wx.service.MsgReplyService;
@@ -29,6 +30,8 @@ public class WxMsgManageController {
     private WxMsgService wxMsgService;
     @Autowired
     private MsgReplyService msgReplyService;
+    @Autowired
+    WxMpInfo wxMpInfo;
 
     /**
      * 列表
@@ -36,7 +39,8 @@ public class WxMsgManageController {
     @GetMapping("/list")
     //@RequiresPermissions("wx:wxmsg:list")
     @ApiOperation(value = "列表")
-    public R list(@CookieValue String appid, @RequestParam Map<String, Object> params) {
+    public R list(@RequestParam Map<String, Object> params) {
+        String appid = wxMpInfo.getAppId();
         params.put("appid", appid);
         PageUtils page = wxMsgService.queryPage(params);
 
@@ -50,7 +54,7 @@ public class WxMsgManageController {
     @GetMapping("/info/{id}")
     //@RequiresPermissions("wx:wxmsg:info")
     @ApiOperation(value = "详情")
-    public R info(@CookieValue String appid, @PathVariable("id") Long id) {
+    public R info(@PathVariable("id") Long id) {
         WxMsg wxMsg = wxMsgService.getById(id);
 
         return R.ok().put("wxMsg", wxMsg);
@@ -62,7 +66,7 @@ public class WxMsgManageController {
     @PostMapping("/reply")
     //@RequiresPermissions("wx:wxmsg:save")
     @ApiOperation(value = "回复")
-    public R reply(@CookieValue String appid, @RequestBody WxMsgReplyForm form) {
+    public R reply(@RequestBody WxMsgReplyForm form) {
 
         msgReplyService.reply(form.getOpenid(), form.getReplyType(), form.getReplyContent());
         return R.ok();
@@ -74,7 +78,7 @@ public class WxMsgManageController {
     @PostMapping("/delete")
     //@RequiresPermissions("wx:wxmsg:delete")
     @ApiOperation(value = "删除")
-    public R delete(@CookieValue String appid, @RequestBody Long[] ids) {
+    public R delete(@RequestBody Long[] ids) {
         wxMsgService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
