@@ -1,5 +1,7 @@
 package com.github.niefy.modules.wx.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.github.niefy.modules.wx.dto.WxMpInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +12,12 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * 微信消息
+ *
  * @author Binary Wang
  */
 @RequiredArgsConstructor
@@ -22,12 +26,14 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = {"微信消息 - 腾讯会调用"})
 public class WxMpPortalController {
     private final WxMpService wxService;
+    @Autowired
+    private WxMpInfo wxMpInfo;
     private final WxMpMessageRouter messageRouter;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(produces = "text/plain;charset=utf-8")
-    @ApiOperation(value = "微信服务器的认证消息",notes = "公众号接入开发模式时腾讯调用此接口")
+    @ApiOperation(value = "微信服务器的认证消息", notes = "公众号接入开发模式时腾讯调用此接口")
     public String authGet(@PathVariable String appid,
                           @RequestParam(name = "signature", required = false) String signature,
                           @RequestParam(name = "timestamp", required = false) String timestamp,
@@ -35,7 +41,7 @@ public class WxMpPortalController {
                           @RequestParam(name = "echostr", required = false) String echostr) {
 
         logger.info("\n接收到来自微信服务器的认证消息：[{}, {}, {}, {}]", signature,
-            timestamp, nonce, echostr);
+                timestamp, nonce, echostr);
         if (StringUtils.isAnyBlank(signature, timestamp, nonce, echostr)) {
             throw new IllegalArgumentException("请求参数非法，请核实!");
         }
@@ -49,7 +55,7 @@ public class WxMpPortalController {
     }
 
     @PostMapping(produces = "application/xml; charset=UTF-8")
-    @ApiOperation(value = "微信各类消息",notes = "公众号接入开发模式后才有效")
+    @ApiOperation(value = "微信各类消息", notes = "公众号接入开发模式后才有效")
     public String post(@PathVariable String appid,
                        @RequestBody String requestBody,
                        @RequestParam("signature") String signature,
@@ -61,6 +67,8 @@ public class WxMpPortalController {
 //		logger.debug("\n接收微信请求：[openid=[{}], [signature=[{}], encType=[{}], msgSignature=[{}],"
 //						+ " timestamp=[{}], nonce=[{}], requestBody=[\n{}\n] ",
 //				openid, signature, encType, msgSignature, timestamp, nonce, requestBody);
+        wxMpInfo.setAppId(appid);
+        logger.info("微信公众号默认消息 wxMpInfo={}", JSON.toJSONString(wxMpInfo));
         this.wxService.switchoverTo(appid);
         if (!wxService.checkSignature(timestamp, nonce, signature)) {
             throw new IllegalArgumentException("非法请求，可能属于伪造的请求！");
@@ -70,7 +78,7 @@ public class WxMpPortalController {
         if (encType == null) {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
-            WxMpXmlOutMessage outMessage = this.route(appid,inMessage);
+            WxMpXmlOutMessage outMessage = this.route(appid, inMessage);
             if (outMessage == null) {
                 return "";
             }
@@ -79,9 +87,9 @@ public class WxMpPortalController {
         } else if ("aes".equalsIgnoreCase(encType)) {
             // aes加密的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
-                timestamp, nonce, msgSignature);
+                    timestamp, nonce, msgSignature);
             logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
-            WxMpXmlOutMessage outMessage = this.route(appid,inMessage);
+            WxMpXmlOutMessage outMessage = this.route(appid, inMessage);
             if (outMessage == null) {
                 return "";
             }
@@ -93,9 +101,9 @@ public class WxMpPortalController {
         return out;
     }
 
-    private WxMpXmlOutMessage route(String appid,WxMpXmlMessage message) {
+    private WxMpXmlOutMessage route(String appid, WxMpXmlMessage message) {
         try {
-            return this.messageRouter.route(appid,message);
+            return this.messageRouter.route(appid, message);
         } catch (Exception e) {
             logger.error("路由消息时出现异常！", e);
         }

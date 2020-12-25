@@ -1,5 +1,6 @@
 package com.github.niefy.modules.wx.manage;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.niefy.common.utils.PageUtils;
 import com.github.niefy.common.utils.R;
 import com.github.niefy.modules.wx.entity.WxUser;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,12 +33,23 @@ public class WxUserManageController {
     /**
      * 列表
      */
-    @GetMapping("/list")
+    @PostMapping("/list")
     //@RequiresPermissions("wx:wxuser:list")
     @ApiOperation(value = "列表")
-    public R list(@CookieValue String appid, @RequestParam Map<String, Object> params) {
+//    public R list(@CookieValue String appid, @RequestParam Map<String, Object> params) {
+    public R list(@RequestParam("appid") String appid
+//            ,@RequestParam("totalCount") int totalCount
+//            ,@RequestParam("totalPage") int totalPage
+            , @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
+            , @RequestParam(value = "currPage", required = false, defaultValue = "1") int currPage) {
+        Map<String, Object> params = new HashMap<>();
+//        params.put("totalCount", totalCount);
+//        params.put("totalPage", totalPage);
+        params.put("pageSize", pageSize);
+        params.put("currPage", currPage);
         params.put("appid", appid);
-        PageUtils page = new PageUtils(userService.queryPage(params));
+        IPage<WxUser> pages = userService.queryPage(params);
+        PageUtils page = new PageUtils(pages);
 
         return R.ok().put("page", page);
     }
@@ -71,7 +84,7 @@ public class WxUserManageController {
     @PostMapping("/syncWxUsers")
     //@RequiresPermissions("wx:wxuser:save")
     @ApiOperation(value = "同步用户列表到数据库")
-    public R syncWxUsers(@CookieValue String appid) {
+    public R syncWxUsers(@RequestBody String appid) {
         userService.syncWxUsers(appid);
 
         return R.ok("任务已建立");
