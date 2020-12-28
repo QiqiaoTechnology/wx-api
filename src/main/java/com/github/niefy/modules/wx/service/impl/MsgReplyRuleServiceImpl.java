@@ -31,12 +31,13 @@ public class MsgReplyRuleServiceImpl extends ServiceImpl<MsgReplyRuleMapper, Msg
         String appid = (String) params.get("appid");
         int pageSize = 10;
         if (null != params.get("pageSize")) {
-            pageSize = (int) params.get("pageSize");
+            pageSize = Integer.parseInt((String) params.get("pageSize"));
+
         }
 
         int currPage = 1;
         if (null != params.get("currPage")) {
-            currPage = (int) params.get("currPage");
+            currPage = Integer.parseInt((String) params.get("currPage"));
         }
         IPage<MsgReplyRule> page = this.page(
                 new Query<MsgReplyRule>().getPage(params).setCurrent(currPage).setSize(pageSize),

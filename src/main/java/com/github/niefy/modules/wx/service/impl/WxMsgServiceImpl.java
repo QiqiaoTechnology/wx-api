@@ -27,12 +27,13 @@ public class WxMsgServiceImpl extends ServiceImpl<WxMsgMapper, WxMsg> implements
         String appid = (String) params.get("appid");
         int pageSize = 10;
         if (null != params.get("pageSize")) {
-            pageSize = (int) params.get("pageSize");
+            pageSize = Integer.parseInt((String) params.get("pageSize"));
         }
 
         int currPage = 1;
         if (null != params.get("currPage")) {
-            currPage = (int) params.get("currPage");
+            currPage = Integer.parseInt((String) params.get("currPage"));
+
         }
         IPage<WxMsg> page = this.page(
                 new Query<WxMsg>().getPage(params).setCurrent(currPage).setSize(pageSize),
