@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/wx/msg/{appid}")
-@Api(tags = {"微信消息 - 腾讯会调用"})
+@Api(tags = {"微信服务器授权"})
 public class WxMpPortalController {
     private final WxMpService wxService;
     @Autowired
