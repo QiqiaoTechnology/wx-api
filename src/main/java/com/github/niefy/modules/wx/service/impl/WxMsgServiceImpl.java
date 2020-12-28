@@ -25,8 +25,17 @@ public class WxMsgServiceImpl extends ServiceImpl<WxMsgMapper, WxMsg> implements
         String startTime = (String)params.get("startTime");
         String openid = (String)params.get("openid");
         String appid = (String) params.get("appid");
+        int pageSize = 10;
+        if (null != params.get("pageSize")) {
+            pageSize = (int) params.get("pageSize");
+        }
+
+        int currPage = 1;
+        if (null != params.get("currPage")) {
+            currPage = (int) params.get("currPage");
+        }
         IPage<WxMsg> page = this.page(
-                new Query<WxMsg>().getPage(params),
+                new Query<WxMsg>().getPage(params).setCurrent(currPage).setSize(pageSize),
                 new QueryWrapper<WxMsg>()
                         .eq(StringUtils.hasText(appid), "appid", appid)
                         .in(StringUtils.hasText(msgTypes),"msg_type", Arrays.asList(msgTypes.split(",")))
