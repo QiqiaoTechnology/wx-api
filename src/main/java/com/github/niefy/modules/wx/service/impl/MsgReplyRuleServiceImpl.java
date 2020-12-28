@@ -26,8 +26,17 @@ public class MsgReplyRuleServiceImpl extends ServiceImpl<MsgReplyRuleMapper, Msg
     public PageUtils queryPage(Map<String, Object> params) {
         String matchValue = (String) params.get("matchValue");
         String appid = (String) params.get("appid");
+        int pageSize = 10;
+        if (null != params.get("pageSize")) {
+            pageSize = (int) params.get("pageSize");
+        }
+
+        int currPage = 1;
+        if (null != params.get("currPage")) {
+            currPage = (int) params.get("currPage");
+        }
         IPage<MsgReplyRule> page = this.page(
-                new Query<MsgReplyRule>().getPage(params),
+                new Query<MsgReplyRule>().getPage(params).setCurrent(currPage).setSize(pageSize),
                 new QueryWrapper<MsgReplyRule>()
                         .eq(StringUtils.hasText(appid), "appid", appid)
                         .or()

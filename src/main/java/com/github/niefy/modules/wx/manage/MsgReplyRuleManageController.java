@@ -35,9 +35,13 @@ public class MsgReplyRuleManageController {
 
     /**
      * 列表
+     * map{
+     *     matchValue string
+     *     currPage int
+     *     pageSize int
+     * }
      */
     @GetMapping("/list")
-    //@RequiresPermissions("wx:msgreplyrule:list")
     @ApiOperation(value = "列表")
     public R list(@RequestParam Map<String, Object> params) {
         String appid = wxMpInfo.getAppId();
