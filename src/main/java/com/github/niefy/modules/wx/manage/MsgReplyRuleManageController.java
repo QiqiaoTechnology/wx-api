@@ -36,9 +36,9 @@ public class MsgReplyRuleManageController {
     /**
      * 列表
      * map{
-     *     matchValue string
-     *     currPage int
-     *     pageSize int
+     * matchValue string
+     * currPage int
+     * pageSize int
      * }
      */
     @GetMapping("/list")
@@ -72,6 +72,9 @@ public class MsgReplyRuleManageController {
     //@RequiresPermissions("wx:msgreplyrule:save")
     @ApiOperation(value = "保存")
     public R save(@RequestBody MsgReplyRule msgReplyRule) {
+        String appid = wxMpInfo.getAppId();
+        msgReplyRule.setAppid(appid);
+
         msgReplyRuleService.save(msgReplyRule);
 
         return R.ok();
