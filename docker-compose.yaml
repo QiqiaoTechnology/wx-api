@@ -14,24 +14,93 @@ services:
     # 访问端口
     ports:
     - "8088:8088"
+    depends_on:
+    - mysql
+    - nginx
     environment:
     # 指定时区
     - TZ="Asia/Shanghai"
-    entrypoint: java -server -Xms256m -Xmx256m -jar -Dserver.port=8088 -Dspring.profiles.active=dev wx-api.
+    entrypoint: java -server -Xms256m -Xmx256m -jar -Dserver.port=8088 -Dspring.profiles.active=prod wx-api.jar
+
+  qiqiao:
+    restart: always
+    image: openjdk:8
+    container_name: qiqiao_api
+    volumes:
+    # 本地jar包路径
+    - /usr/local/jar/qiqiao-api.jar:/qiqiao-api.jar:rw
+    - /usr/local/qiqiao/logs:/usr/local/qiqiao/logs:rw
+    # 指定容器时间为宿主机时间
+    - /etc/localtime:/etc/localtime:rw
+    depends_on:
+    - mysql
+    - minio
+    - redis
+    - nginx
+    # 访问端口
+    ports:
+    - "8082:8082"
+    environment:
+    # 指定时区
+    - TZ="Asia/Shanghai"
+    entrypoint: java -server -Xms256m -Xmx256m -jar -Dserver.port=8082 -Dspring.profiles.active=prod qiqiao-api.jar
+
+  minio:
+    image: minio/minio:latest
+    container_name: qiqiao_minio
+    ports:
+    - "9000:9000"
+    restart: always
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: zhggp@2020 #大于等于8位
+    logging:
+      options:
+        max-size: "50M" # 最大文件上传限制
+        max-file: "10"
+      driver: json-file
+    volumes:
+    - /usr/local/minio:/data:rw
+
+  redis:
+    image: redis
+    container_name: qiqiao_redis
+    restart: always
+    ports:
+    - 6379:6379
+    volumes:
+    - /usr/local/redis/conf/redis.conf:/etc/redis/redis.conf:rw
+    - /usr/local/redis/data:/data :rw
+    - /usr/local/redis/logs:/logs :rw
+    command:
+      redis-server /etc/redis/redis.conf --appendonly yes
 
   mysql:
     restart: always
     image: mysql
-    container_name: my_mysql
+    container_name: qiqiao_mysql
     volumes:
-    - /usr/local//mysql/mydir:/mydir
+    - /usr/local/mysql/mydir:/mydir
     - /usr/local/mysql/var/lib/mysql:/var/lib/mysql
-    - /usr/local/mysql/etc/my.cnf:/etc/my.cnf
+    - /usr/local/mysql/conf/my.cnf:/etc/my.cnf
     #      数据库还原目录 可将需要还原的sql文件放在这里
     - /usr/local/mysql/source:/docker-entrypoint-initdb.d
     environment:
-    - "MYSQL_ROOT_PASSWORD=zhggp2020"
+    - "MYSQL_ROOT_PASSWORD=zhggp@2020"
     - "MYSQL_DATABASE=mydb"
     - "TZ=Asia/Shanghai"
     ports:
     - 3306:3306
+  nginx:
+    restart: always
+    image: nginx
+    container_name: qiqiao_mysql
+    volumes:
+#    - /etc/letsencrypt/archive/7qiao.club/fullchain1.pem:/etc/tls-keys/pub.pem:ro
+#    - /usr/local/archive/7qiao.club/privkey1.pem:/etc/tls-keys/prv.pem:ro
+    - /usr/local/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+    - "8443:443"
+    depends_on:
+    - www
