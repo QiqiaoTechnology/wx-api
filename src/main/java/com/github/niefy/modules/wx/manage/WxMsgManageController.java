@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.*;
 
 
@@ -46,12 +47,15 @@ public class WxMsgManageController {
     @GetMapping("/list")
     //@RequiresPermissions("wx:wxmsg:list")
     @ApiOperation(value = "列表")
-    public R list(@RequestParam Map<String, Object> params) {
+    public R list(@RequestParam Map<String, Object> params) throws ParseException {
         log.info("WxMsgManageController.list.params={}", JSON.toJSONString(params));
 
         String appid = wxMpInfo.getAppId();
         params.put("appid", appid);
         PageUtils page = wxMsgService.queryPage(params);
+        if (page.getList().isEmpty()) {
+            return R.ok().put("page", null);
+        }
         ArrayList<WxMsg> list = (ArrayList<WxMsg>) page.getList();
         log.info("WxMsgManageController.list.list={}", JSON.toJSONString(list));
 

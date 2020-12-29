@@ -22,7 +22,7 @@
 		<mysql.version>8.0.17</mysql.version>
 		<!--<shiro.version>1.7.0</shiro.version>-->
 		<jwt.version>0.9.1</jwt.version>
-		<kaptcha.version>0.0.9</kaptcha.version>
+		<!--<kaptcha.version>0.0.9</kaptcha.version>-->
 		<qiniu.version>7.2.29</qiniu.version>
 		<aliyun.oss.version>3.9.1</aliyun.oss.version>
 		<qcloud.cos.version>5.6.24</qcloud.cos.version>
@@ -86,11 +86,11 @@
 			<artifactId>jjwt</artifactId>
 			<version>${jwt.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.github.axet</groupId>
-			<artifactId>kaptcha</artifactId>
-			<version>${kaptcha.version}</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.github.axet</groupId>-->
+			<!--<artifactId>kaptcha</artifactId>-->
+			<!--<version>${kaptcha.version}</version>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
