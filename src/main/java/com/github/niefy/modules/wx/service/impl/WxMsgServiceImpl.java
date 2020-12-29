@@ -27,6 +27,9 @@ public class WxMsgServiceImpl extends ServiceImpl<WxMsgMapper, WxMsg> implements
     @Override
     public PageUtils queryPage(Map<String, Object> params) throws ParseException {
         String msgTypes = (String) params.get("msgTypes");
+        if (null == msgTypes) {
+            msgTypes = "";
+        }
         String startTime = (String) params.get("startTime");
 
         Date endTimeDate = DateUtils.parse(startTime, DATE_TIME_PATTERN2);

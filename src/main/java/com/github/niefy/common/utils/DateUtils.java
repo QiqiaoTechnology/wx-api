@@ -46,7 +46,7 @@ public class DateUtils {
     }
 
     public static Date parse(String dateStr, String pattern) throws ParseException {
-        if (dateStr != null) {
+        if (StringUtil.isNotBlank(dateStr)) {
             SimpleDateFormat df = new SimpleDateFormat(pattern);
             return df.parse(dateStr);
         }
@@ -83,6 +83,9 @@ public class DateUtils {
      * @return 加/减几小时后的日期
      */
     public static Date addDateHours(Date date, int hours) {
+        if (null == date) {
+            return null;
+        }
         return new Date(date.getTime() + hours * 60 * 60 * 1000);
     }
 
@@ -94,6 +97,9 @@ public class DateUtils {
      * @return 加/减几天后的日期
      */
     public static Date addDateDays(Date date, int days) {
+        if (null == date) {
+            return null;
+        }
         return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
     }
 
