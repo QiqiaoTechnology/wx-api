@@ -3,6 +3,7 @@ package com.github.niefy.modules.wx.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.niefy.config.TaskExcutor;
+import com.github.niefy.modules.wx.dto.WxMpInfo;
 import com.github.niefy.modules.wx.entity.MsgReplyRule;
 import com.github.niefy.modules.wx.entity.WxMsg;
 import com.github.niefy.modules.wx.service.MsgReplyRuleService;
@@ -35,10 +36,13 @@ public class MsgReplyServiceImpl implements MsgReplyService {
     MsgReplyRuleService msgReplyRuleService;
     @Autowired
     WxMpService wxMpService;
-    @Value("${wx.mp.autoReplyInterval:1000}")
-    Long autoReplyInterval;
     @Autowired
     WxMsgService wxMsgService;
+    @Autowired
+    WxMpInfo wxMpInfo;
+    @Value("${wx.mp.autoReplyInterval:1000}")
+    Long autoReplyInterval;
+
 
     /**
      * 根据规则配置通过微信客服消息接口自动回复消息
@@ -77,7 +81,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
         wxMpService.getKefuService().sendKefuMessage(WxMpKefuMessage.TEXT().toUser(toUser).content(content).build());
 
         JSONObject json = new JSONObject().fluentPut("content", content);
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.TEXT, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.TEXT, toUser, wxMpInfo.getAppId(), json));
     }
 
     @Override
@@ -85,7 +89,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
         wxMpService.getKefuService().sendKefuMessage(WxMpKefuMessage.IMAGE().toUser(toUser).mediaId(mediaId).build());
 
         JSONObject json = new JSONObject().fluentPut("mediaId", mediaId);
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.IMAGE, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.IMAGE, toUser, wxMpInfo.getAppId(), json));
     }
 
     @Override
@@ -93,7 +97,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
         wxMpService.getKefuService().sendKefuMessage(WxMpKefuMessage.VOICE().toUser(toUser).mediaId(mediaId).build());
 
         JSONObject json = new JSONObject().fluentPut("mediaId", mediaId);
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.VOICE, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.VOICE, toUser, wxMpInfo.getAppId(), json));
     }
 
     @Override
@@ -101,7 +105,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
         wxMpService.getKefuService().sendKefuMessage(WxMpKefuMessage.VIDEO().toUser(toUser).mediaId(mediaId).build());
 
         JSONObject json = new JSONObject().fluentPut("mediaId", mediaId);
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.VIDEO, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.VIDEO, toUser, wxMpInfo.getAppId(), json));
     }
 
     @Override
@@ -116,7 +120,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
                         .thumbMediaId(json.getString("thumb_media_id"))
                         .build());
 
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.IMAGE, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.IMAGE, toUser, wxMpInfo.getAppId(), json));
     }
 
     /**
@@ -134,7 +138,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
         }};
         wxMpService.getKefuService().sendKefuMessage(WxMpKefuMessage.NEWS().toUser(toUser).articles(newsList).build());
 
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.NEWS, toUser, JSON.parseObject(newsInfoJson)));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.NEWS, toUser, wxMpInfo.getAppId(), JSON.parseObject(newsInfoJson)));
     }
 
     /**
@@ -149,7 +153,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
         wxMpService.getKefuService().sendKefuMessage(WxMpKefuMessage.MPNEWS().toUser(toUser).mediaId(mediaId).build());
 
         JSONObject json = new JSONObject().fluentPut("mediaId", mediaId);
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.MPNEWS, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.MPNEWS, wxMpInfo.getAppId(), toUser, json));
     }
 
     @Override
@@ -157,7 +161,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
         wxMpService.getKefuService().sendKefuMessage(WxMpKefuMessage.WXCARD().toUser(toUser).cardId(cardId).build());
 
         JSONObject json = new JSONObject().fluentPut("cardId", cardId);
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.WXCARD, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.WXCARD, toUser, wxMpInfo.getAppId(), json));
     }
 
     @Override
@@ -172,7 +176,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
                         .thumbMediaId(json.getString("thumb_media_id"))
                         .build());
 
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.IMAGE, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.IMAGE, toUser, wxMpInfo.getAppId(), json));
     }
 
     @Override
@@ -186,7 +190,7 @@ public class MsgReplyServiceImpl implements MsgReplyService {
                         .tailContent(json.getString("tail_content"))
                         .msgMenus(msgMenus).build());
 
-        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.IMAGE, toUser, json));
+        wxMsgService.addWxMsg(WxMsg.buildOutMsg(WxConsts.KefuMsgType.IMAGE, wxMpInfo.getAppId(), toUser, json));
     }
 
 }
