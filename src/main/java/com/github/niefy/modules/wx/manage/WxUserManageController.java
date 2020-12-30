@@ -101,16 +101,16 @@ public class WxUserManageController {
     }
 
 
-    /**
-     * 删除
-     */
-    @PostMapping("/delete")
-    //@RequiresPermissions("wx:wxuser:delete")
-    @ApiOperation(value = "删除")
-    public R delete(@RequestBody String[] ids) {
-        userService.removeByIds(Arrays.asList(ids));
-
-        return R.ok();
-    }
+//    /**
+//     * 删除
+//     */
+//    @PostMapping("/delete")
+//    //@RequiresPermissions("wx:wxuser:delete")
+//    @ApiOperation(value = "删除")
+//    public R delete(@RequestBody String[] ids) {
+//        userService.removeByIds(Arrays.asList(ids));
+//
+//        return R.ok();
+//    }
 
 }

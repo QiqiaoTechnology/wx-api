@@ -3,9 +3,9 @@ package com.github.niefy.modules.wx.entity;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.github.niefy.common.utils.Json;
 import lombok.Data;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
@@ -17,6 +17,7 @@ import java.util.Date;
 
 /**
  * 微信粉丝
+ *
  * @author Nifury
  * @date 2017-9-27
  */
@@ -43,6 +44,11 @@ public class WxUser implements Serializable {
     private String subscribeScene;
     private String qrSceneStr;
 
+    /**
+     * 1 黑名单
+     * 0 正常用户
+     */
+    private int isBlacklist;
     public WxUser() {
     }
 
@@ -50,38 +56,59 @@ public class WxUser implements Serializable {
         this.openid = openid;
     }
 
-    public WxUser(WxMpUser wxMpUser,String appid) {
+    public WxUser(WxMpUser wxMpUser, String appid, int isBlacklist) {
+        this.isBlacklist = isBlacklist;
         this.openid = wxMpUser.getOpenId();
         this.appid = appid;
-        this.subscribe=wxMpUser.getSubscribe();
-        if(wxMpUser.getSubscribe()){
+        this.subscribe = wxMpUser.getSubscribe();
+        if (wxMpUser.getSubscribe()) {
             this.nickname = wxMpUser.getNickname();
             this.sex = wxMpUser.getSex();
             this.city = wxMpUser.getCity();
             this.province = wxMpUser.getProvince();
             this.headimgurl = wxMpUser.getHeadImgUrl();
-            this.subscribeTime = new Date(wxMpUser.getSubscribeTime()*1000);
-            this.unionid=wxMpUser.getUnionId();
-            this.remark=wxMpUser.getRemark();
-            this.tagidList=JSONArray.parseArray(JSONObject.toJSONString(wxMpUser.getTagIds()));
-            this.subscribeScene=wxMpUser.getSubscribeScene();
-            String qrScene =  wxMpUser.getQrScene();
-            this.qrSceneStr= !StringUtils.hasText(qrScene) ? wxMpUser.getQrSceneStr() : qrScene;
+            this.subscribeTime = new Date(wxMpUser.getSubscribeTime() * 1000);
+            this.unionid = wxMpUser.getUnionId();
+            this.remark = wxMpUser.getRemark();
+            this.tagidList = JSONArray.parseArray(JSONObject.toJSONString(wxMpUser.getTagIds()));
+            this.subscribeScene = wxMpUser.getSubscribeScene();
+            String qrScene = wxMpUser.getQrScene();
+            this.qrSceneStr = !StringUtils.hasText(qrScene) ? wxMpUser.getQrSceneStr() : qrScene;
+        }
+    }
+
+    public WxUser(WxMpUser wxMpUser, String appid) {
+        this.openid = wxMpUser.getOpenId();
+        this.appid = appid;
+        this.subscribe = wxMpUser.getSubscribe();
+        if (wxMpUser.getSubscribe()) {
+            this.nickname = wxMpUser.getNickname();
+            this.sex = wxMpUser.getSex();
+            this.city = wxMpUser.getCity();
+            this.province = wxMpUser.getProvince();
+            this.headimgurl = wxMpUser.getHeadImgUrl();
+            this.subscribeTime = new Date(wxMpUser.getSubscribeTime() * 1000);
+            this.unionid = wxMpUser.getUnionId();
+            this.remark = wxMpUser.getRemark();
+            this.tagidList = JSONArray.parseArray(JSONObject.toJSONString(wxMpUser.getTagIds()));
+            this.subscribeScene = wxMpUser.getSubscribeScene();
+            String qrScene = wxMpUser.getQrScene();
+            this.qrSceneStr = !StringUtils.hasText(qrScene) ? wxMpUser.getQrSceneStr() : qrScene;
         }
     }
 
     public WxUser(WxOAuth2UserInfo wxMpUser, String appid) {
         this.openid = wxMpUser.getOpenid();
         this.appid = appid;
-		this.subscribe=wxMpUser.getNickname()!=null;
-		if(this.subscribe){
-			this.nickname = wxMpUser.getNickname();
-			this.sex = wxMpUser.getSex();
-			this.city = wxMpUser.getCity();
-			this.province = wxMpUser.getProvince();
-			this.headimgurl = wxMpUser.getHeadImgUrl();
-			this.unionid=wxMpUser.getUnionId();
-		}
+        this.subscribe = wxMpUser.getNickname() != null;
+        if (this.subscribe) {
+            this.nickname = wxMpUser.getNickname();
+            this.sex = wxMpUser.getSex();
+            this.city = wxMpUser.getCity();
+            this.province = wxMpUser.getProvince();
+            this.headimgurl = wxMpUser.getHeadImgUrl();
+            this.unionid = wxMpUser.getUnionId();
+        }
     }
 
     @Override
