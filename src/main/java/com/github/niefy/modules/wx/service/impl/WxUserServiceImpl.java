@@ -37,7 +37,8 @@ public class WxUserServiceImpl extends ServiceImpl<WxUserMapper, WxUser> impleme
     @Autowired
     private WxMpService wxMpService;
     private volatile static boolean syncWxUserTaskRunning = false;
-
+    @Autowired
+    private WxBlacklistService wxBlacklistService;
     @Override
     public IPage<WxUser> queryPage(Map<String, Object> params) {
 //        String openid = (String) params.get("openid");
@@ -149,6 +150,12 @@ public class WxUserServiceImpl extends ServiceImpl<WxUserMapper, WxUser> impleme
             logger.error("同步公众号粉丝出错:", e);
         } finally {
             syncWxUserTaskRunning = false;
+        }
+        /*同步完用户数据后，同步用户黑名单数据*/
+        try {
+            wxBlacklistService.syncBlacklist();
+        } catch (WxErrorException e) {
+            logger.error("同步公众号粉丝黑名单出错:", e);
         }
         logger.info("同步公众号粉丝列表：完成");
     }
