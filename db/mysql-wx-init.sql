@@ -1,3 +1,9 @@
+#grant all privileges on dbname.tablename to 'username'@'%';
+# 比如想给用户nacos赋予数据库test所有的表的权限并且不限制root用户的连接地址，代码如下
+grant all privileges on wx.* to 'wx'@'%';
+# 刷新权限
+flush privileges;
+
 create table wx_account
 (
   appid    char(20)                     not null
