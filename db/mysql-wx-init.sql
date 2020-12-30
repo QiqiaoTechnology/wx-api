@@ -115,6 +115,7 @@ create table wx_user
   qr_scene_str    varchar(64)                  null
   comment '扫码场景值',
   is_blacklist    int default '0'              not null
+  comment '是否黑名单用户，0是黑名单',
 )
   comment '用户表'
   charset = utf8mb4;

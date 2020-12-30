@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -40,6 +41,7 @@ public class WxBlacklistServiceImpl  implements WxBlacklistService {
 
     // 获取公众号的黑名单列表  一次拉10000个 一次拉完全部
     //openid为空时，默认从开头拉取。
+    @Async
     public void syncBlacklist() throws WxErrorException {
         Assert.isTrue(!syncWxUserTaskRunning, "后台有同步公众号的黑名单列表的任务正在进行中，请稍后重试");
         logger.info("WxBlacklistService.getBlacklist start ");
