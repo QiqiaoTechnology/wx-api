@@ -7,6 +7,7 @@ import com.github.niefy.common.utils.Query;
 import com.github.niefy.config.TaskExcutor;
 import com.github.niefy.modules.wx.dao.WxUserMapper;
 import com.github.niefy.modules.wx.entity.WxUser;
+import com.github.niefy.modules.wx.service.WxBlacklistService;
 import com.github.niefy.modules.wx.service.WxUserService;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -16,6 +17,7 @@ import me.chanjar.weixin.mp.bean.result.WxMpUserList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -38,7 +40,9 @@ public class WxUserServiceImpl extends ServiceImpl<WxUserMapper, WxUser> impleme
     private WxMpService wxMpService;
     private volatile static boolean syncWxUserTaskRunning = false;
     @Autowired
+    @Lazy
     private WxBlacklistService wxBlacklistService;
+
     @Override
     public IPage<WxUser> queryPage(Map<String, Object> params) {
 //        String openid = (String) params.get("openid");
@@ -58,6 +62,19 @@ public class WxUserServiceImpl extends ServiceImpl<WxUserMapper, WxUser> impleme
 //                .like(StringUtils.hasText(nickname), "nickname", nickname)
 //				.eq(StringUtils.hasText(city), "city", city)
 //				.eq(StringUtils.hasText(qrSceneStr), "qrSceneStr", qrSceneStr)
+        );
+    }
+    @Override
+    /*查询黑名单的用户*/
+    public IPage<WxUser> queryBlacklistPage(Map<String, Object> params) {
+        String appid = (String) params.get("appid");
+        int currPage = (int) params.get("currPage");
+        int pageSize = (int) params.get("pageSize");
+        return this.page(
+                new Query<WxUser>().getPage(params).setCurrent(currPage).setSize(pageSize),
+                new QueryWrapper<WxUser>()
+                        .eq(StringUtils.hasText(appid), "appid", appid)
+                        .eq(true, "is_blacklist", 1)
         );
     }
 

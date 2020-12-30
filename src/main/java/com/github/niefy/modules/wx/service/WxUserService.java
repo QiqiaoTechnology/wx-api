@@ -14,6 +14,12 @@ public interface WxUserService extends IService<WxUser> {
      * @return PageUtils 分页结果
      */
     IPage<WxUser> queryPage(Map<String, Object> params);
+    /**
+     * 分页查询黑名单用户的数据
+     * @param params 查询参数
+     * @return PageUtils 分页结果
+     */
+    IPage<WxUser> queryBlacklistPage(Map<String, Object> params);
 
     /**
      * 根据openid更新用户信息

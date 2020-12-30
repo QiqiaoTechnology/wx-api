@@ -3,6 +3,8 @@ package com.github.niefy.modules.wx.service.impl;
 import com.github.niefy.config.TaskExcutor;
 import com.github.niefy.modules.wx.dto.WxMpInfo;
 import com.github.niefy.modules.wx.entity.WxUser;
+import com.github.niefy.modules.wx.service.WxBlacklistService;
+import com.github.niefy.modules.wx.service.WxUserService;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.WxMpUserBlacklistService;
@@ -12,6 +14,7 @@ import me.chanjar.weixin.mp.bean.result.WxMpUserBlacklistGetResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -20,14 +23,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class WxBlacklistService {
+public class WxBlacklistServiceImpl  implements WxBlacklistService {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     WxMpService wxMpService;
     @Autowired
     WxMpInfo wxMpInfo;
     @Autowired
-    WxUserServiceImpl wxUserService;
+    @Lazy
+    WxUserService wxUserService;
     /**
      * 单机就不考虑分布式锁了
      */
