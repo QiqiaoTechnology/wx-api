@@ -25,7 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/manage/msgReplyRule")
 @Api(tags = {"a岑璐要的接口-公众号自动回复规则-管理后台"})
-public class MsgReplyRuleManageController {
+public class WxMsgReplyRuleManageController {
     @Autowired
     private MsgReplyRuleService msgReplyRuleService;
     @Autowired

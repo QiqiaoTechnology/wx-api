@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>wx-api</artifactId>
-	<groupId>com.github.niefy</groupId>
+	<groupId>com.zhggp.qiqiao.wx</groupId>
 	<version>0.8.1</version>
 	<packaging>jar</packaging>
 	<description>wx-api</description>
@@ -20,8 +20,6 @@
 		<java.version>1.8</java.version>
 		<mybatisplus.version>3.4.1</mybatisplus.version>
 		<mysql.version>8.0.17</mysql.version>
-		<jwt.version>0.9.1</jwt.version>
-		<qcloud.cos.version>5.6.24</qcloud.cos.version>
 		<swagger.version>3.0.0</swagger.version>
 		<fastjson.version>1.2.9</fastjson.version>
 		<lombok.version>1.18.16</lombok.version>
@@ -67,52 +65,19 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.apache.shiro</groupId>-->
-			<!--<artifactId>shiro-core</artifactId>-->
-			<!--<version>${shiro.version}</version>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.apache.shiro</groupId>-->
-			<!--<artifactId>shiro-spring</artifactId>-->
-			<!--<version>${shiro.version}</version>-->
-		<!--</dependency>-->
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>${jwt.version}</version>
-		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>com.github.axet</groupId>-->
-			<!--<artifactId>kaptcha</artifactId>-->
-			<!--<version>${kaptcha.version}</version>-->
-		<!--</dependency>-->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>com.qiniu</groupId>-->
-			<!--<artifactId>qiniu-java-sdk</artifactId>-->
-			<!--<version>${qiniu.version}</version>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>com.aliyun.oss</groupId>-->
-			<!--<artifactId>aliyun-sdk-oss</artifactId>-->
-			<!--<version>${aliyun.oss.version}</version>-->
-		<!--</dependency>-->
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
 		<dependency>
-			<groupId>com.qcloud</groupId>
-			<artifactId>cos_api</artifactId>
-			<version>${qcloud.cos.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.30</version>
+			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
@@ -141,6 +106,7 @@
 			</properties>
 		</profile>
 	</profiles>
+
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
