@@ -84,6 +84,7 @@ public class WxMsgManageController {
             WxMsgDto dto = new WxMsgDto(wx);
             dto.setHeadImgurl(user.getHeadimgurl());
             dto.setNickName(user.getNickname());
+            dto.setIsBlacklist(user.getIsBlacklist());
             tempList.add(dto);
         }
         log.info("WxMsgManageController.list.tempList={}", JSON.toJSONString(tempList));

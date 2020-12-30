@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/manage/wxAccount")
-@Api(tags = {"a岑璐要的接口-公众号账号管理后台"})
+@Api(tags = {"a岑璐要的接口-公众号账号-管理后台"})
 public class WxAccountManageController {
     @Autowired
     WxMpService wxMpService;

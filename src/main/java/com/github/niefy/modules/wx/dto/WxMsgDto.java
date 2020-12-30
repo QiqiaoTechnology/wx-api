@@ -57,7 +57,11 @@ public class WxMsgDto implements Serializable {
      * 创建时间
      */
     private Date createTime;
-
+    /**
+     * 1 黑名单
+     * 0 正常用户
+     */
+    private int isBlacklist;
     public static class WxMsgInOut {
         static final byte IN = 0;
         static final byte OUT = 1;

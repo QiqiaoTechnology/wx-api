@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-//todo 修改消息的接口 在黑名单里就不显示消息
-//todo 修改粉丝的接口 粉丝页面里多加一个粉丝状态
+//todo 修改消息的接口 带上用户是否黑名单
+// 修改粉丝的接口 粉丝页面里多加一个粉丝状态
 // 黑名单接口可以通过微信的服务器修改，所以应该以微信服务器的消息为基准
 @RestController
 @RequestMapping("/manage/wxBlacklist")
