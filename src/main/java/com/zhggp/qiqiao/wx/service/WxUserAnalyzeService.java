@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface WxUserAnalyzeService extends IService<WxDataCubeUserEntity> {
-    List<WxDataCubeUserSummary> getUserSummary(Date beginDate, Date endDate) throws WxErrorException;
+    List<WxDataCubeUserEntity> getUserSummary(Date beginDate, Date endDate) throws WxErrorException;
 
-    List<WxDataCubeUserCumulate> getUserCumulate(Date beginDate, Date endDate) throws WxErrorException;
+    List<WxDataCubeUserEntity> getUserCumulate(Date beginDate, Date endDate) throws WxErrorException;
 }

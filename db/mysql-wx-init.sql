@@ -4,6 +4,9 @@ grant all privileges on wx.* to 'wx'@'%';
 # 刷新权限
 flush privileges;
 
+CREATE DATABASE IF NOT EXISTS wx DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;
+use wx;
+
 create table wx_account
 (
   appid    char(20)                     not null
@@ -22,8 +25,7 @@ create table wx_account
   aes_key  varchar(43)                  null
   comment 'aesKey'
 )
-  comment '公众号账号'
-  charset = utf8;
+  comment '公众号账号';
 
 create table wx_msg
 (
@@ -43,8 +45,7 @@ create table wx_msg
   create_time datetime default CURRENT_TIMESTAMP null
   comment '创建时间'
 )
-  comment '微信消息'
-  charset = utf8mb4;
+  comment '微信消息';
 
 create index idx_appid
   on wx_msg (appid)
@@ -80,8 +81,7 @@ create table wx_msg_reply_rule
   on update CURRENT_TIMESTAMP
   comment '修改时间'
 )
-  comment '自动回复规则'
-  charset = utf8;
+  comment '自动回复规则';
 
 create index idx_appid
   on wx_msg_reply_rule (appid)
@@ -123,8 +123,7 @@ create table wx_user
   is_blacklist    int default '0'              not null
   comment '是否黑名单用户，0是黑名单',
 )
-  comment '用户表'
-  charset = utf8mb4;
+  comment '用户表';
 
 create index idx_appid
   on wx_user (appid)
@@ -145,6 +144,7 @@ create table wx_date_cube_user
   appid         char(20) default ''                null
   comment '微信公众号appid',
   ref_date      datetime                           not null
+   primary key
   comment '数据记录时间',
   user_source   int default 0                      not null
   comment '用户的渠道',
@@ -164,4 +164,3 @@ create table wx_date_cube_user
   comment '修改时间'
 )
   comment '微信公众号用户数据分析表';
-

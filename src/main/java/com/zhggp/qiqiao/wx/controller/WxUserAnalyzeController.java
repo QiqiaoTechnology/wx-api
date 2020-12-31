@@ -1,6 +1,7 @@
 package com.zhggp.qiqiao.wx.controller;
 
 import com.zhggp.qiqiao.wx.common.utils.R;
+import com.zhggp.qiqiao.wx.db.entity.WxDataCubeUserEntity;
 import com.zhggp.qiqiao.wx.service.WxUserAnalyzeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 //todo 微信只能查七天的 不分页
+// todo new_user减去cancel_user即为净增用户数量
 
 /**
  * 有数据的几个数据
@@ -35,7 +37,7 @@ public class WxUserAnalyzeController {
     @ApiOperation(value = "获取用户增减数据")
     public R getWxUserSummary(@RequestParam(name = "beginDate", required = false) Date beginDate
             , @RequestParam(name = "endDate", required = false) Date endDate) throws WxErrorException {
-        List<WxDataCubeUserSummary> list = wxUserAnalyzeService.getUserSummary(beginDate, endDate);
+        List<WxDataCubeUserEntity> list = wxUserAnalyzeService.getUserSummary(beginDate, endDate);
         return R.ok().put(list);
     }
 
@@ -43,7 +45,7 @@ public class WxUserAnalyzeController {
     @ApiOperation(value = "获取累计用户数据")
     public R getWxUserCumulate(@RequestParam(name = "beginDate", required = false) Date beginDate
             , @RequestParam(name = "endDate", required = false) Date endDate) throws WxErrorException {
-        List<WxDataCubeUserCumulate> list = wxUserAnalyzeService.getUserCumulate(beginDate, endDate);
+        List<WxDataCubeUserEntity> list = wxUserAnalyzeService.getUserCumulate(beginDate, endDate);
 
         return R.ok().put(list);
     }

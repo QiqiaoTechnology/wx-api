@@ -1,7 +1,11 @@
 package com.zhggp.qiqiao.wx.db.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import me.chanjar.weixin.mp.bean.datacube.WxDataCubeUserCumulate;
+import me.chanjar.weixin.mp.bean.datacube.WxDataCubeUserSummary;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +22,7 @@ public class WxDataCubeUserEntity implements Serializable {
     /**
      * 数据记录时间
      */
+    @TableId(type = IdType.INPUT)
     private Date refDate;
     /**
      * 用户的渠道，数值代表的含义如下：
@@ -56,5 +61,22 @@ public class WxDataCubeUserEntity implements Serializable {
      * 更新时间'
      */
     private Date updateTime;
+
+    public WxDataCubeUserEntity() {
+
+    }
+
+    public WxDataCubeUserEntity(WxDataCubeUserSummary dataCubeUserSummary) {
+        this.refDate = dataCubeUserSummary.getRefDate();
+        this.newUser = dataCubeUserSummary.getNewUser();
+        this.cancelUser = dataCubeUserSummary.getCancelUser();
+        this.userSource = dataCubeUserSummary.getUserSource();
+    }
+
+
+    public WxDataCubeUserEntity(WxDataCubeUserCumulate dataCubeUserSummary) {
+        this.refDate = dataCubeUserSummary.getRefDate();
+        this.cumulateUser = dataCubeUserSummary.getCumulateUser();
+    }
 
 }
