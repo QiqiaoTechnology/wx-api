@@ -136,3 +136,32 @@ create index idx_unionid
 
 INSERT INTO `wx_msg_reply_rule` VALUES (1, '', '关注回复', 'subscribe', 0, 'text', '你好，欢迎关注！', 1, '关注回复', '00:00:00', '23:59:59', 0, '2020-05-20 15:15:00');
 INSERT INTO `wx_msg_reply_rule` VALUES (2, '', '默认回复', 'default', 0, 'text', '你好！', 1, '关注回复', '00:00:00', '23:59:59', 0, '2020-05-20 15:15:00');
+
+
+
+-- auto-generated definition
+create table wx_date_cube_user
+(
+  appid         char(20) default ''                null
+  comment '微信公众号appid',
+  ref_date      datetime                           not null
+  comment '数据记录时间',
+  user_source   int default 0                      not null
+  comment '用户的渠道',
+  new_user      int default 0                      not null
+  comment '新增的用户数量',
+  cancel_user   int default 0                      not null
+  comment '取消关注的用户数量',
+  cumulate_user int default 0                      not null
+  comment '总用户量',
+
+  is_deleted    int default 0                      not null
+  comment '是否删除（1是；0否）',
+  create_time   datetime default CURRENT_TIMESTAMP not null
+  comment '创建时间',
+  update_time   datetime default CURRENT_TIMESTAMP not null
+  on update CURRENT_TIMESTAMP
+  comment '修改时间'
+)
+  comment '微信公众号用户数据分析表';
+
